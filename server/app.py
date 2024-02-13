@@ -16,12 +16,12 @@ app = Flask(
     template_folder='../client/build'
 )
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI', 'postgresql://mangara:PF2l9sqRzNqGZfdYfR9ogbI2LML09tPh@dpg-cn5ibbect0pc738g35kg-a.frankfurt-postgres.render.com/bird_app_db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
 
-migrate = Migrate(app, db)
 db.init_app(app)
+migrate = Migrate(app, db)
 
 @app.errorhandler(404)
 def not_found(e):
@@ -81,3 +81,7 @@ class BirdByID(Resource):
         return make_response('', 204)
 
 api.add_resource(BirdByID, '/birds/<int:id>')
+
+
+if __name__ == '__main__':
+    app.run(port=5555, debug=True)
